@@ -1,0 +1,274 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "Gestion Étudiants",
+    "description": "Collection de test de l'API de gestion d'étudiants.\n\n1. Exécuter « Inscription » ou « Connexion » : le token JWT est sauvegardé automatiquement dans la variable {{token}}.\n2. Exécuter ensuite les requêtes du dossier Étudiants.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentification",
+      "item": [
+        {
+          "name": "Inscription",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 201\", () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set(\"token\", json.data.token);",
+                  "  console.log(\"Token sauvegarde dans la variable {{token}}\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"prof@test.mg\",\n  \"motDePasse\": \"motdepasse123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Connexion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set(\"token\", json.data.token);",
+                  "  console.log(\"Token sauvegarde dans la variable {{token}}\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"prof@test.mg\",\n  \"motDePasse\": \"motdepasse123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Étudiants",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Lister les étudiants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 200\", () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/etudiants",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lire un étudiant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 200\", () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/etudiants/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Créer un étudiant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 201\", () => pm.response.to.have.status(201));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Rakoto\",\n  \"prenom\": \"Jean\",\n  \"email\": \"jean.rakoto@uni.mg\",\n  \"dateNaissance\": \"2003-05-14\",\n  \"filiere\": \"Informatique\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/etudiants",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remplacer un étudiant (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 200\", () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Rakotomalala\",\n  \"prenom\": \"Jean-Paul\",\n  \"email\": \"jp.rakoto@uni.mg\",\n  \"dateNaissance\": \"2003-05-14\",\n  \"filiere\": \"Genie Logiciel\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/etudiants/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modifier partiellement un étudiant (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 200\", () => pm.response.to.have.status(200));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filiere\": \"Data Science\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/etudiants/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer un étudiant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Statut 204\", () => pm.response.to.have.status(204));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/etudiants/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["etudiants", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

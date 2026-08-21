@@ -1,0 +1,95 @@
+@baseUrl = http://localhost:3000
+@token = colle_ici_le_token_recu_par_connexion_ou_inscription
+
+### 1. Inscription (201 - le token est dans la reponse)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "prof@test.mg",
+  "motDePasse": "motdepasse123"
+}
+
+### 2. Connexion (200 - copier data.token dans @token ci-dessus)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "prof@test.mg",
+  "motDePasse": "motdepasse123"
+}
+
+### 3. Connexion avec mauvais mot de passe (401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "prof@test.mg",
+  "motDePasse": "mauvais"
+}
+
+### 4. Liste des etudiants (200)
+GET {{baseUrl}}/etudiants
+Authorization: Bearer {{token}}
+
+### 5. Lire l'etudiant 1 (200)
+GET {{baseUrl}}/etudiants/1
+Authorization: Bearer {{token}}
+
+### 6. Lire un etudiant inexistant (404)
+GET {{baseUrl}}/etudiants/9999
+Authorization: Bearer {{token}}
+
+### 7. Creer un etudiant (201)
+POST {{baseUrl}}/etudiants
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nom": "Rakoto",
+  "prenom": "Jean",
+  "email": "jean.rakoto@uni.mg",
+  "dateNaissance": "2003-05-14",
+  "filiere": "Informatique"
+}
+
+### 8. Creer un etudiant invalide (400 - prenom manquant)
+POST {{baseUrl}}/etudiants
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nom": "Rakoto"
+}
+
+### 9. Remplacer l'etudiant 1 (200)
+PUT {{baseUrl}}/etudiants/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nom": "Rakotomalala",
+  "prenom": "Jean-Paul",
+  "email": "jp.rakoto@uni.mg",
+  "dateNaissance": "2003-05-14",
+  "filiere": "Genie Logiciel"
+}
+
+### 10. Modifier partiellement l'etudiant 1 (200)
+PATCH {{baseUrl}}/etudiants/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "filiere": "Data Science"
+}
+
+### 11. Supprimer l'etudiant 1 (204)
+DELETE {{baseUrl}}/etudiants/1
+Authorization: Bearer {{token}}
+
+### 12. Acces sans token (401)
+GET {{baseUrl}}/etudiants
+
+### 13. Route inconnue (404)
+GET {{baseUrl}}/inconnu
