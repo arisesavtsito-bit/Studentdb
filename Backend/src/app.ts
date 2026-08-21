@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
+import etudiantRoutes from "./routes/etudiantRoutes";
 import { errorHandler } from "./middlewares/errorHandler";
 
 const app: Express = express();
@@ -13,6 +14,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/etudiants", etudiantRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ success: false, message: "Route introuvable." });
