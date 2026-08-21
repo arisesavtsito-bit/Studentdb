@@ -1,0 +1,218 @@
+:root {
+  --fond: #f1f5f9;
+  --carte: #ffffff;
+  --texte: #0f172a;
+  --texteDoux: #64748b;
+  --bordure: #e2e8f0;
+  --primaire: #2563eb;
+  --primaireFonce: #1d4ed8;
+  --danger: #dc2626;
+  --dangerFonce: #b91c1c;
+  --succes: #16a34a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: var(--fond);
+  color: var(--texte);
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.pageCentree {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carte {
+  background-color: var(--carte);
+  border: 1px solid var(--bordure);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.carteEtroite {
+  width: 100%;
+  max-width: 400px;
+}
+
+.titre {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.sousTitre {
+  margin: 4px 0 20px;
+  color: var(--texteDoux);
+}
+
+.enTete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.enTeteActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.utilisateur {
+  color: var(--texteDoux);
+  font-size: 0.9rem;
+}
+
+.onglets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.onglet {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--texteDoux);
+}
+
+.ongletActif {
+  background-color: var(--primaire);
+  border-color: var(--primaire);
+  color: #ffffff;
+}
+
+.formulaire {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.champ input,
+.champ select {
+  padding: 10px 12px;
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  outline: none;
+}
+
+.champ input:focus,
+.champ select:focus {
+  border-color: var(--primaire);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.bouton {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boutonPrincipal {
+  background-color: var(--primaire);
+  color: #ffffff;
+}
+
+.boutonPrincipal:hover:not(:disabled) {
+  background-color: var(--primaireFonce);
+}
+
+.boutonSecondaire {
+  background-color: transparent;
+  border: 1px solid var(--bordure);
+  color: var(--texte);
+}
+
+.boutonSecondaire:hover:not(:disabled) {
+  background-color: var(--fond);
+}
+
+.boutonDanger {
+  background-color: var(--danger);
+  color: #ffffff;
+}
+
+.boutonDanger:hover:not(:disabled) {
+  background-color: var(--dangerFonce);
+}
+
+.messageErreur {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: #fee2e2;
+  color: var(--dangerFonce);
+  font-size: 0.9rem;
+}
+
+.tableau {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableau th,
+.tableau td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--bordure);
+  font-size: 0.92rem;
+}
+
+.tableau th {
+  color: var(--texteDoux);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.tableau tbody tr:hover {
+  background-color: var(--fond);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions .bouton {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
