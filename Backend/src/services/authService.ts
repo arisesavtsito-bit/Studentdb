@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { pool } from "../db/pool";
 import { env } from "../config/env";
 import { AppError } from "../errors/appError";
+import { estEmailValide } from "../utils/validators";
 import { JwtPayloadUtilisateur, Utilisateur } from "../types";
 
 interface UtilisateurRow {
@@ -11,10 +12,8 @@ interface UtilisateurRow {
   mot_de_passe: string;
 }
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 function validerCredentials(email: unknown, motDePasse: unknown): void {
-  if (typeof email !== "string" || !EMAIL_REGEX.test(email)) {
+  if (!estEmailValide(email)) {
     throw new AppError(400, "Email invalide.");
   }
   if (typeof motDePasse !== "string" || motDePasse.length < 6) {
