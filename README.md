@@ -81,3 +81,43 @@ Format des réponses JSON :
 - `main` : branche de production — ne reçoit que des merges de `develop` via Pull Request.
 - Commits au format [Conventional Commits](https://www.conventionalcommits.org/fr-fr/) avec scope
   (ex. `feat(auth): ...`, `fix(db): ...`).
+
+## Déploiement sur Render
+
+Le dépôt contient un Blueprint Render ([`render.yaml`](render.yaml)) qui déploie les deux composants :
+une base PostgreSQL et le backend (Web Service Node).
+
+### Méthode 1 : Blueprint automatique
+
+1. Pousser `develop` puis fusionner dans `main` via Pull Request.
+2. Sur [dashboard.render.com](https://dashboard.render.com) : **New → Blueprint**, sélectionner le repo.
+   Render lit `render.yaml` et pré-remplit tout (base + API), sans aucune variable à saisir.
+3. Le schéma SQL est appliqué automatiquement au démarrage du backend (`initDb`, idempotent).
+
+### Méthode 2 : services manuels
+
+| Service | Type | Root directory | Build command | Start command |
+| ------- | ---- | -------------- | ------------- | ------------- |
+| `gestion-etudiants-db`  | PostgreSQL          | —        | —                        | —            |
+| `gestion-etudiants-api` | Web Service (Node)  | `Backend`| `npm ci && npm run build`| `npm start`  |
+
+**Variables d'environnement du backend** (dashboard Render, jamais en dur dans le code) :
+reporter les informations de connexion « Internal Database URL » de la base Render :
+
+| Variable      | Valeur (page Info de la base Render) |
+| ------------- | ------------------------------------ |
+| `DB_HOST`     | Host                                 |
+| `DB_PORT`     | Port                                 |
+| `DB_USER`     | Username                             |
+| `DB_PASSWORD` | Password                             |
+| `DB_NAME`     | Database                             |
+| `JWT_SECRET`  | longue chaîne aléatoire              |
+| `PORT`        | `3000`                               |
+
+### Notes importantes
+
+- Les instances gratuites Render s'endorment après ~15 min d'inactivité : la première requête
+  peut prendre 30 à 60 secondes.
+- La base PostgreSQL gratuite expire après 30 jours : pensez à la recréer ou migrer si besoin.
+- En cas de connexion à une base externe chiffrée, ajouter la variable `DB_SSL=true`.
+
