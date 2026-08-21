@@ -84,6 +84,54 @@ Frontend/         Client React + TypeScript (Vite)
 - Commits au format [Conventional Commits](https://www.conventionalcommits.org/fr-fr/).
 - Toute fusion vers `main` passe par une Pull Request.
 
-## Déploiement
+## Déploiement sur Render
 
-Voir la section [Déploiement sur Render](#déploiement-sur-render) (ajoutée avec la configuration Render).
+Le dépôt contient un Blueprint Render ([`render.yaml`](render.yaml)) qui déploie les trois composants :
+une base PostgreSQL, le backend (Web Service Node) et le frontend (Static Site).
+
+### Méthode 1 : Blueprint automatique
+
+1. Pousser `main` sur GitHub (via Pull Requests).
+2. Sur [dashboard.render.com](https://dashboard.render.com) : **New → Blueprint**, sélectionner le repo
+   `Studentdb`. Render lit `render.yaml` et pré-remplit tout.
+3. Renseigner la seule variable demandée : `VITE_API_URL`
+   (ex. `https://gestion-etudiants-api.onrender.com`) puis **Apply**.
+4. Le schéma SQL est appliqué automatiquement au démarrage du backend (`initDb`, idempotent).
+
+### Méthode 2 : services manuels
+
+| Service | Type | Root directory | Build command | Start / Publish |
+| ------- | ---- | -------------- | ------------- | ---------------- |
+| `gestion-etudiants-api` | Web Service (Node) | `Backend` | `npm ci && npm run build` | `npm start` |
+| `gestion-etudiants-web` | Static Site | `Frontend` | `npm ci && npm run build` | publish `dist` |
+
+**Variables d'environnement du backend** (dashboard Render, jamais en dur dans le code) :
+créer d'abord une instance PostgreSQL (**New → PostgreSQL**) et reporter ses informations
+de connexion « Internal Database URL » :
+
+| Variable    | Valeur (page Info de la base Render) |
+| ----------- | ------------------------------------ |
+| `DB_HOST`   | Host                                 |
+| `DB_PORT`   | Port                                 |
+| `DB_USER`   | Username                             |
+| `DB_PASSWORD` | Password                           |
+| `DB_NAME`   | Database                             |
+| `JWT_SECRET`| longue chaîne aléatoire              |
+| `PORT`      | `3000`                               |
+
+**Variable d'environnement du frontend** :
+
+| Variable       | Valeur                                        |
+| -------------- | --------------------------------------------- |
+| `VITE_API_URL` | URL publique du backend, ex. `https://<nom>.onrender.com` |
+
+⚠️ `VITE_API_URL` est injectée **au moment du build** par Vite : si vous la modifiez après le
+premier déploiement, déclencher un **Manual Deploy** sur le service frontend.
+
+### Notes importantes
+
+- Les instances gratuites Render s'endorment après ~15 min d'inactivité : la première requête
+  peut prendre 30 à 60 secondes.
+- La base PostgreSQL gratuite expire après 30 jours : pensez à la recréer ou migrer si besoin.
+- En cas de connexion à une base externe chiffrée, ajouter la variable `DB_SSL=true`.
+
