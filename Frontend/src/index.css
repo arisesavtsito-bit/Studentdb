@@ -48,6 +48,22 @@ body {
   max-width: 400px;
 }
 
+.carteFormulaire {
+  margin-bottom: 20px;
+}
+
+.champRangee {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .champRangee {
+    grid-template-columns: 1fr;
+  }
+}
+
 .titre {
   margin: 0;
   font-size: 1.5rem;
